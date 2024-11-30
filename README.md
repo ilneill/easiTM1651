@@ -121,9 +121,11 @@ See the [datasheet](https://www.nxp.com/docs/en/data-sheet/TM1651_V1.1_EN.pdf) f
 
 The image below shows the relatively common Gotek (if you have upgaded your Gotek display and want to do something with it) TM1651 based 3-digit LED 7-segment module.
 
-| | LEDC68 Module | |
+| | The Gotek LEDC68 Module | |
 |-------|-------|-------|
+| Front | | Rear |
 | ![LEDC68 Module - Front](images/Gotek_LEDC68-Front.jpg) | | ![LEDC68 Module - Rear](images/Gotek_LEDC68-Rear.jpg) |
+| | Circuit Diagram | |
 | | ![LEDC68 Module - Circuit](images/LEDC68_Circuit.png) | |
 
 
