@@ -88,14 +88,14 @@ __void displayDP(bool status = false);__
 
 ## TM1651 Chip Pinout
 
-| DIP16 | 
+| DIP16 Package | 
 |-------| 
 | ![DIP16](images/TM1651(DIP16).png)| 
 
 
 ### Pin Descriptions of the TM1651 DIP16 Package
 
-|Pin Label | Pin Number (DIP16) | Description |
+|Pin Label | Pin Number | Description |
 |----------|--------------------|-------------|
 |GND| 1| GND - ground |
 |SEG1/KS1| 2| Output (segment 1) |
@@ -121,6 +121,7 @@ See the [datasheet](https://www.nxp.com/docs/en/data-sheet/TM1651_V1.1_EN.pdf) f
 
 The image below shows the relatively common Gotek (if you have upgaded your Gotek display and want to do something with it) TM1651 based 3-digit LED 7-segment module.
 
+| | LEDC68 Module | |
 |-------|-------|-------|
 | ![LEDC68 Module - Front](images/Gotek_LEDC68-Front.jpg) | | ![LEDC68 Module - Rear](images/Gotek_LEDC68-Rear.jpg) |
 | | ![LEDC68 Module - Circuit](images/LEDC68_Circuit.png) | |
