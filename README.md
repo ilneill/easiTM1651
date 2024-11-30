@@ -11,7 +11,7 @@ The TM1651 is a small IC that can control up to four 7-segment LED display digit
 
 Another project I am working on (A Kim-1 Mega Emulator) has a lot of rabbit holes that I am compelled to go down.
 
-One such rabbit hole is trying and testing libraries and hardware for some keypad input and LED/LCD output. I am mostly testing on an Arduino Mini Pro (it was what I had to hand), but I also am using an Arduino Mega (it was beside the Mini Pro). After a lot of research, none of the existing TM1651 libraries were ticking all the boxes for what I wanted to achieve, and how I wanted to achieve it. So, I decided to write my own libary for the TM1651, doing exactly what I wanted, how I wanted it to be done, keeping it simple and without any unnecessary "features".
+One such rabbit hole is trying and testing libraries and hardware for some keypad input and LED/LCD output. I am mostly testing on an Arduino Mini Pro (it was what I had to hand), but I also am using an Arduino Mega (it was beside the Mini Pro). After a lot of research, none of the existing TM1651 libraries were ticking all the boxes for what I wanted to achieve, and how I wanted to achieve it. So, I decided to write my own library for the TM1651, doing exactly what I wanted, how I wanted it to be done, keeping it simple and without any unnecessary "features".
 
 
 ## Contents
@@ -19,20 +19,20 @@ One such rabbit hole is trying and testing libraries and hardware for some keypa
 1. [Library Features](https://github.com/ilneill/easiTM1651/#library-features)
 2. [Library Installation](https://github.com/ilneill/easiTM1651/#library-installation)
 3. [API Details](https://github.com/ilneill/easiTM1651/#api-details)
-4. [TM1651 Chip Pinout](https://github.com/ilneill/easiTM1651/#tm1651_chip_pinout)
-5. [A Common TM1651 Module](https://github.com/ilneill/easiTM1651/#a_common-tm1651-module)
-6. [Example Hardware Build](https://github.com/ilneill/easiTM1651/#example_hardware_build)
+4. [TM1651 Chip Pinout](https://github.com/ilneill/easiTM1651/#tm1651-chip-pinout)
+5. [A Common TM1651 Module](https://github.com/ilneill/easiTM1651/#a-common-tm1651-module)
+6. [Example Hardware Build](https://github.com/ilneill/easiTM1651/#example-hardware-build)
 7. [ToDo](https://github.com/ilneill/easiTM1651/#todo)
 8. [References](https://github.com/ilneill/easiTM1651/#references)
 
 
 ## Library Features
 
-This library uses manual bit banging for the serial communication protocol and implements higher functions built on one that simply write bytes to the TM1651 device.
+This library uses manual bit banging for the serial communication protocol and implements several higher functions built on one that simply write bytes to the TM1651 device.
 
-* Support displays of up to 4 digits using the TM1651.
+* Support LED 7-Segment displays of up to 4 digits using the TM1651.
 * Has functions to easily display 8, 12 and 16 bit numbers in decimal or hex digits.
-* Supports the Gotek LEDC68 3-digit module, including its (poor) decimal point implementation.
+* Supports the Gotek LEDC68 3-digit LED module, including its (poor) decimal point implementation.
 
 
 ## Library Installation
