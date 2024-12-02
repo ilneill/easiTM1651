@@ -13,15 +13,15 @@
 #include "easiTM1651.h"
 
 // Pin definitions for the TM1651 - the interface might look like I2C, but it is not!
-#define CLKPIN 2                  // Clock.
-#define DIOPIN 3                  // Data In/Out.
+#define CLKPIN 2                                          // Clock.
+#define DIOPIN 3                                          // Data In/Out.
 
 // Instantiate a TM1651 display.
-easiTM1651 myDisplay(CLKPIN, DIOPIN, true); // Set Clock and data pins and declare that we have an LEDC68 module.
+TM1651 myDisplay(CLKPIN, DIOPIN, true);                   // Set Clock and data pins and declare that we have an LEDC68 module.
 
 void setup() {
   Serial.begin(9600);
-  myDisplay.begin(3, INTENSITY_TYP); // Digits = 3, Brightness = 2, Display cleared (all segments OFF and decimal points OFF).
+  myDisplay.begin(3, INTENSITY_TYP);                      // Digits = 3, Brightness = 2, Display cleared (all segments OFF and decimal points OFF).
   Serial.println("\nDisplay brightness and digit test.");
   testDisplay();
   delay(1000);
@@ -67,12 +67,12 @@ void testDisplay() {
   // Display brightness test.
   for(brightness = INTENSITY_MIN; brightness <= INTENSITY_MAX; brightness++) {
     myDisplay.displayBrightness(brightness);
-    myDisplay.displayInt12(brightness * 111);
+    myDisplay.displayInt12(0, (brightness * 111));
     delay(1000);
   }
   // Clear the display and set the brightness to the typical value.
   myDisplay.displayClear();
-  myDisplay.displayBrightness(brightness);
+  myDisplay.displayBrightness(INTENSITY_TYP);
   // Display all characters on each digit.
   for(digit = 0; digit < 3; digit++) {
     // Cycle through each code in the character table, deliberately exceeding the table size by 1 to finish on a default space (0x00).
@@ -91,9 +91,9 @@ void testDisplay() {
 
 void countHex8(uint32_t interval) {
   byte counter = 0;
-  myDisplay.displayChar(1, 0x12); // Print an "h" in the first digit.
+  myDisplay.displayChar(0, 0x12);                         // Print an "h" in the 1st digit.
   do {
-    myDisplay.displayInt8(2, counter, false);
+    myDisplay.displayInt8(1, counter, false);             // Print the 8-bit count in the 2nd and 3rd digits.
     delay(interval);
   } while(++counter != 0);
 }
@@ -101,7 +101,7 @@ void countHex8(uint32_t interval) {
 void countHex12(uint32_t interval) {
   uint16_t counter = 0;
   do {
-    myDisplay.displayInt12(1, counter, false);
+    myDisplay.displayInt12(0, counter, false);            // Print the 12-bit count in the 1st, 2nd and 3rd digits.
     delay(interval);
   } while(++counter != 0x1000);
 }
@@ -109,7 +109,7 @@ void countHex12(uint32_t interval) {
 void countUp(uint16_t number, uint32_t interval) {
   int16_t counter;
   for(counter = 0; counter <= number; counter++) {
-    myDisplay.displayInt12(1, counter);
+    myDisplay.displayInt12(0, counter);                   // Print the 12-bit count in the 1st, 2nd and 3rd digits.
     delay(interval);
   }
 }
@@ -117,7 +117,7 @@ void countUp(uint16_t number, uint32_t interval) {
 void countDown(uint16_t number, uint32_t interval) {
   int16_t counter;
   for(counter = number; counter >= 0; counter--) {
-    myDisplay.displayInt12(1, counter);
+    myDisplay.displayInt12(0, counter);                   // Print the 12-bit count in the 1st, 2nd and 3rd digits.
     delay(interval);
   }
 }
@@ -129,9 +129,9 @@ void countXMins(byte minutesMax) {
   }
   for(minutes = 0; minutes < minutesMax; minutes++) {
     for(seconds = 0; seconds < 60; seconds++) {
-      myDisplay.displayChar(0, minutes);
-      myDisplay.displayChar(1, seconds / 10);
-      myDisplay.displayChar(2, seconds % 10);
+      myDisplay.displayChar(0, minutes);                  // Print the minutes in the 1st digit.
+      myDisplay.displayChar(1, seconds / 10);             // Print the seconds (x10) in the 2nd digit.
+      myDisplay.displayChar(2, seconds % 10);             // Print the seconds (units) in the 3rd digit.
       delay(1000);
     }
   }
@@ -153,9 +153,9 @@ void countXMinsDP(byte minutesMax) {
       myDisplay.displayDP(dPoint);
       // Update the display and increment the time.
       if(dPoint) {
-        myDisplay.displayChar(0, minutes);
-        myDisplay.displayChar(1, seconds / 10);
-        myDisplay.displayChar(2, seconds % 10);
+        myDisplay.displayChar(0, minutes);                // Print the minutes in the 1st digit.
+        myDisplay.displayChar(1, seconds / 10);           // Print the seconds (x10) in the 2nd digit.
+        myDisplay.displayChar(2, seconds % 10);           // Print the seconds (units) in the 3rd digit.
         if(++seconds == 60) {
           seconds = 0;
           minutes++;

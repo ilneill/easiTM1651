@@ -75,7 +75,7 @@
       void displayInt16(uint8_t, uint16_t, bool = true);  // Display a decimal integer between 0 - 9999, or a hex integer between 0x0000 - 0xffff, starting at a specific digit.
       void displayDP(bool = false);                       // Turn ON/OFF the decimal points.
     private:
-      bool _LEDC68                                        // Flag if we have a Gotek LEDC68 module - affects only the decimal point control.
+      bool _LEDC68;                                       // Flag if we have a Gotek LEDC68 module - affects only the decimal point control.
       uint8_t _clkPin;                                    // The TM1651 clock pin.
       uint8_t _dataPin;                                   // The TM1651 data pin.
       uint8_t _numDigits;                                 // The number of TM1651 digits.
