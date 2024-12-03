@@ -11,7 +11,7 @@ The TM1651 is a small IC that can control up to four 7-segment LED display digit
 
 Another project I am working on (A Kim-1 Mega Emulator) has a lot of rabbit holes that I am compelled to go down.
 
-One such rabbit hole is trying and testing libraries and hardware for some keypad input and LED/LCD output. I am mostly testing on an Arduino Mini Pro (it was what I had to hand), but I also am using an Arduino Mega (it was beside the Mini Pro). After a lot of research, none of the existing TM1651 libraries were ticking all the boxes for what I wanted to achieve, and how I wanted to achieve it. So, I decided to write my own library for the TM1651, doing exactly what I wanted, how I wanted it to be done, keeping it simple and without any unnecessary "features".
+One such rabbit hole is trying and testing libraries and hardware for some keypad input and LED/LCD output. I am mostly testing on an Arduino Mini Pro (it was what I had to hand), but I am also using an Arduino Mega (it was beside the Mini Pro). After a lot of research, none of the existing TM1651 libraries were ticking all the boxes for what I wanted to achieve, and how I wanted to achieve it. So, I decided to write my own library for the TM1651, doing exactly what I wanted, how I wanted it to be done, keeping it simple and without any unnecessary "features".
 
 
 ## Contents
@@ -31,7 +31,7 @@ One such rabbit hole is trying and testing libraries and hardware for some keypa
 This library uses manual bit banging for the serial communication protocol and implements several higher functions built on one that simply write bytes to the TM1651 device.
 
 * Support LED 7-Segment displays of up to 4 digits using the TM1651.
-* Has functions to easily display 8, 12 and 16 bit numbers in decimal or hex digits.
+* Has functions to easily display defined characters and 8, 12 and 16 bit numbers in decimal or hex digits.
 * Supports the Gotek LEDC68 3-digit LED module, including its (poor) decimal point implementation.
 
 
@@ -114,7 +114,7 @@ __void displayDP(bool status = false);__
 |CLK| 15| Clock input |
 |K1| 16| VCC - supply voltage |
 
-See the [datasheet](https://www.nxp.com/docs/en/data-sheet/TM1651_V1.1_EN.pdf) for more details.
+See the [datasheet](datasheets/TM1651_V1.1_EN.pdf) for more details.
 
 
 ## A Common TM1651 Module
@@ -135,7 +135,7 @@ Everything I have written has been tested using an Arduino Mega and an Arduino M
 
 ![An Arduino Mini Pro (ATmega168P)](images/ArduinoMiniPro.jpg)
 
-This is the simple build I used while testing the "LEDC68demo.ino" example with an Arduino Mega.
+This is the simple build I used while testing the [LEDC68demo.ino](examples/LEDC68demo/LEDC68demo.ino) example with an Arduino Mega.
 
 ![Test Build for the LEDC68 Demo Sketch](images/LEDC68_Working_on_a_Mega.jpg)
 
@@ -154,6 +154,10 @@ Other TM1651 Arduino libraries that I was inspired by:
  *    https://github.com/mworkfun/TM1651
 
 The TM1651 Datasheet:
+* [Titan Micro datasheet - TM1651](https://www.nxp.com/docs/en/data-sheet/TM1651_V1.1_EN.pdf)
+
+*or*
+
 * [Titan Micro datasheet - TM1651](http://aitendo3.sakura.ne.jp/aitendo_data/product_img/ic/LED-driver/TM1651_%20V1.2/TM1651_V1.1_EN.pdf)
 
 A useful Internet tutorial:
