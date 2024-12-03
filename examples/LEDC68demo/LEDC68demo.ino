@@ -30,11 +30,11 @@ void setup() {
 void loop() {
   // Used to time the 5 and 10 min delay demos.
   unsigned long timeNow;
-  // Hex number count 0x00 up, 0 - 0xFF, 1 count/125ms.
+  // 8-bit hex number count up, 0x00 - 0xFF, 1 count/125ms.
   Serial.println("Demo 1: 8-bit hex count up.");
   countHex8(125);
   delay(1000);
-  // Hex number count 0x00 down, 0xFFF - 0, 1 count/125ms.
+  // 12-bit hex number count up, 0x000 - 0xFFF, 1 count/125ms.
   Serial.println("Demo 2: 12-bit hex count up.");
   countHex12(125);
   delay(1000);
@@ -42,7 +42,7 @@ void loop() {
   Serial.println("Demo 3: 999 decimal count up.");
   countUp(999, 100);
   delay(1000);
-  // Decimal number countdown, 999 - 0, 1 count/500ms.
+  // Decimal number count down, 999 - 0, 1 count/500ms.
   Serial.println("Demo 4: 999 decimal count down.");
   countDown(999, 500);
   delay(1000);
