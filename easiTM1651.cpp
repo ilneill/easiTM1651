@@ -51,8 +51,8 @@ const static uint8_t tmCharTable[] = {0x3f, 0x06, 0x5b, 0x4f, 0x66, 0x6d, 0x7d, 
 
 // Class constructor.
 TM1651::TM1651(uint8_t clkPin, uint8_t dataPin, bool LEDC68) {
-  _clkPin  = clkPin;                                      // Record the TM1658 clock pin.
-  _dataPin = dataPin;                                     // Record the TM1658 data pin.
+  _clkPin  = clkPin;                                      // Record the TM1651 clock pin.
+  _dataPin = dataPin;                                     // Record the TM1651 data pin.
   _LEDC68 = LEDC68;                                       // Record if we have a Gotek LEDC68 module.
   charTableSize = (sizeof(tmCharTable) / sizeof(*tmCharTable));
 }
@@ -93,7 +93,7 @@ void TM1651::displayClear(void) {
 
 // Set the brightness (0x00 - 0x07) and turn the TM1651 display ON.
 void TM1651::displayBrightness(uint8_t brightness) {
-  _brightness = brightness & INTENSITY_MAX;               // Record the TM1658 brightness level.
+  _brightness = brightness & INTENSITY_MAX;               // Record the TM1651 brightness level.
   cmdDispCtrl = 0x88 + _brightness;                       // 0x88 + 0x00 to 0x07 brightness, 0x88 = display ON.
   this->start();                                          // Send the start signal to the TM1651.
   this->writeByte(cmdDispCtrl);                           // Set the brightness and turn the display ON.
