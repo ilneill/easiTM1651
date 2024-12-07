@@ -12,54 +12,79 @@
 
 #include "easiTM1651.h"
 
+#define ON      HIGH
+#define OFF     LOW
+
 // Pin definitions for the TM1651 - the interface might look like I2C, but it is not!
-#define CLKPIN 2                                          // Clock.
-#define DIOPIN 3                                          // Data In/Out.
+#define CLKPIN  2                                         // Clock.
+#define DIOPIN  3                                         // Data In/Out.
+#define LEDPIN  13                                        // The builtin LED.
 
 // Instantiate a TM1651 display.
 TM1651 myDisplay(CLKPIN, DIOPIN, true);                   // Set Clock and data pins and declare that we have an LEDC68 module.
 
 void setup() {
+  pinMode(LEDPIN, OUTPUT);
+  digitalWrite(LEDPIN, OFF);
   Serial.begin(9600);
   myDisplay.begin(3, INTENSITY_TYP);                      // Digits = 3, Brightness = 2, Display cleared (all segments OFF and decimal points OFF).
   Serial.println("\nDisplay brightness and digit test.");
   testDisplay();
+  blinkLED(100);
   delay(1000);
 }
 
 void loop() {
-  // Used to time the 5 and 10 min delay demos.
-  unsigned long timeNow;
+  unsigned long timeNow;                                  // Used to time the 5 and 10 min delay demos.
+  
   // 8-bit hex number count up, 0x00 - 0xFF, 1 count/125ms.
   Serial.println("Demo 1: 8-bit hex count up.");
   countHex8(125);
+  blinkLED(100);
   delay(1000);
+  
   // 12-bit hex number count up, 0x000 - 0xFFF, 1 count/125ms.
   Serial.println("Demo 2: 12-bit hex count up.");
   countHex12(125);
+  blinkLED(100);
   delay(1000);
+  
   // Decimal number count up, 0 - 999, 1 count/100ms.
   Serial.println("Demo 3: 999 decimal count up.");
   countUp(999, 100);
+  blinkLED(100);
   delay(1000);
+  
   // Decimal number count down, 999 - 0, 1 count/500ms.
   Serial.println("Demo 4: 999 decimal count down.");
   countDown(999, 500);
+  blinkLED(100);
   delay(1000);
+  
   // A 10 minute timer.
   Serial.print("Demo 5: A 5 minute delay() timer: ");
   timeNow = millis();
   countXMins(5);
   Serial.print(millis() - timeNow);
   Serial.println("ms");
+  blinkLED(100);
   delay(1000);
+  
   // A 10 minute timer with flashing decimal point.
   Serial.print("Demo 6: A 10 minute millis() timer & flashing decimal point: ");
   timeNow = millis();
   countXMinsDP(10);
   Serial.print(millis() - timeNow);
   Serial.println("ms");
+  blinkLED(100);
   delay(1000);
+}
+
+// Flash the builtin LED to signal the end of a demo stage.
+void blinkLED(uint32_t interval) {
+  digitalWrite(LEDPIN, ON);
+  delay(interval);
+  digitalWrite(LEDPIN, OFF);
 }
 
 void testDisplay() {
