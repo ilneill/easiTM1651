@@ -1,5 +1,5 @@
 /*!
- * TM1651 Example with a Re-Used Gotek LEDC68/TM1651 based 3-digit LED board.
+ * TM1651 Example with a Re-Used Gotek LEDC68/TM1651 based 3-digit LED module.
  *
  * Written for the Arduino Uno/Nano/Mega.
  * (c) Ian Neill 2024
@@ -61,7 +61,7 @@ void loop() {
   blinkLED(100);
   delay(1000);
   
-  // A 10 minute timer.
+  // A 5 minute timer.
   Serial.print("Demo 5: A 5 minute delay() timer: ");
   timeNow = millis();
   countXMins(5);

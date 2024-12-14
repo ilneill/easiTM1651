@@ -40,9 +40,9 @@
 // A table of simple character codes.
 const static uint8_t tmCharTable[] = {0x3f, 0x06, 0x5b, 0x4f, 0x66, 0x6d, 0x7d, 0x07, 0x7f, 0x6f, // Numbers : 0-9.
                                       0x77, 0x7c, 0x39, 0x5e, 0x79, 0x71,                         // Numbers : A, b, C, d, E, F.
-                                      0x58, 0x6f, 0x74, 0x76, 0x38, 0x54,                         // Chars1  : c, g, h, H, L, n.
-                                      0x37, 0x73, 0x50, 0x1c, 0x3e, 0x6e,                         // Chars2  : N, P, r, u, U, y.
-                                      0x01, 0x40, 0x08, 0x63, 0x00, 0x5c, 0x46, 0x70,             // Specials: uDash, mDash, lDash, uBox, Space, lBox, lBorder, rBorder.
+                                      0x58, 0x6f, 0x74, 0x76, 0x1e, 0x38,                         // Chars1  : c, g, h, H, J, L.
+                                      0x54, 0x37, 0x73, 0x50, 0x1c, 0x3e, 0x6e,                   // Chars2  : n, N, P, r, u, U, y.
+                                      0x01, 0x40, 0x08, 0x00, 0x63, 0x5c, 0x46, 0x70,             // Specials: uDash, mDash, lDash, Space, uBox, lBox, lBorder, rBorder.
                                       0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40};                  // Segments: SegA, SegB, SegC, SegD, SegE, SegF, SegG.
 
 /**************************/
@@ -202,7 +202,7 @@ void TM1651::displayInt16(uint8_t digit, uint16_t number, bool useDec) {
     this->writeByte(ADDR_AUTO);                           // Cmd to auto increment the address.
     this->stop();                                         // Send the stop signal to the TM1651.
     this->start();
-    this->writeByte(STARTADDR + (digit));               // Start at the first digit address.
+    this->writeByte(STARTADDR + digit);                   // Start at the first digit address.
     if(useDec) {
       this->writeByte(tmCharTable[(number / 1000) % 10]);
       this->writeByte(tmCharTable[(number /  100) % 10]);
@@ -289,7 +289,7 @@ void TM1651::stop(void) {
 
 // Wait for a bit...
 void TM1651::bitDelay(void) {
-  delayMicroseconds(50);                                  // I think this might go as low as 4us (250KHz).
+  delayMicroseconds(5);                                   // I think this might go as low as 4us (250KHz).
 }
 
 // EOF
