@@ -30,10 +30,10 @@ One such rabbit hole is trying and testing libraries and hardware for some keypa
 
 This library uses manual bit banging for the serial communication protocol and implements several higher functions built on one that simply write bytes to the TM1651 device.
 
-* Support LED 7-Segment displays of up to 4 digits using the TM1651.
+* Supports LED 7-Segment displays of up to 4 digits using the TM1651.
+* Supports the auto addressing and fixed addressing modes of the TM1651 chip.
 * Has functions to easily display defined characters and 8, 12 and 16 bit numbers in decimal or hex digits.
 * Supports the Gotek LEDC68 3-digit LED module, including its (poor) decimal point implementation.
-
 
 ## Library Installation
 
@@ -59,7 +59,10 @@ __TM1651(uint8_t clkPin = 2, uint8_t dataPin = 3, bool LEDC68 = true);__
 
 ### Functions:
 __void begin(uint8_t numDigits = 3, uint8_t brightness = 2);__
-* Set up the display and initialise it with defaults values. Returns nothing.
+* Set up the display and initialise it with starting values. Returns nothing.
+
+__void begin(uint8_t* tmDigitMap, uint8_t numDigits = 3, uint8_t brightness = 2);__
+* Compile time dependent. Set up the display and initialise it with starting values. Returns nothing.
 
 __void displayOff(void);__
 * Turn the TM1651 display OFF. Returns nothing.
@@ -83,7 +86,63 @@ __void displayInt16(uint8_t digit, uint16_t number, bool useDec = true);__
 * Display a decimal integer between 0 - 9999, or a hex integer between 0x0000 - 0xffff, starting at a specific digit. Returns nothing.
 
 __void displayDP(bool status = false);__
-* Turn ON/OFF the decimal points. Returns nothing.
+* Turn ON/OFF the decimal points. Returns nothing. Only works if it is an LEDC68 module.
+
+### TM1651 Addressing Modes
+The TM1651 uses addresses and enable lines (GRID1- GRID4) to uniquely identify and access each of the LED 7-Segment display digits.
+
+Logical digit 0 = Address 0x00
+Logical digit 1 = Address 0x01
+Logical digit 2 = Address 0x02
+Logical digit 3 = Address 0x03 (or the decimal point if it is an LEDC68 module).
+
+The TM1651 chip supports 2 addressing modes and the mode that is used by the library is determined at compile time using a compiler definition in the "easiTM1651.h" file.
+
+* if __USEADDRAUTOMODE__ is defined: Automatic address mode is used.
+* if __USEADDRAUTOMODE__ is NOT defined: Fixed address mode is used.
+
+__Automatic__
+In this mode, the address to be used by the TM1651 for accessing the first digit is specified before the digit write, and is automatically incremented, after each digit write, to point to the next digit.
+
+This is useful if the digits to be written to are in sequential order.
+
+__Fixed__
+In this mode, the address to be used by the TM1651 for accessing each digit must be specified, before each digit write, to point to the digit that is to be written to.
+
+This is useful if the digits to be written to are not in increasing sequential order. If, for example, the logical addressing of the TM1651 based display does not match the phyical layout, than this mode should be used. This concept is explained more below.
+
+
+### TM1651 Logical to Physical Address Mapping
+As alluded to earlier, the TM1651 uses addresses for each LED 7-Segment display digit.
+
+In this library I have assumed that the lefthand digit is logical digit 0, and the righthand digit is logical digit 3. However, it may be that the physical layout of the digits, left to right is not the same as the logical addressing.
+
+For instance, if the physical layout is such that logical digit 0, addressed by 0x00, is the righthand digit, and logical digit 3, addressed by 0x03, is the lefthand digit, then, without some translation, this library will actually display everything backwards. 
+
+i.e. Trying to display "h123" would actually look like "321h" on such a display.
+
+It might be that the logical and physical layouts are not simply reversed. When writing the related and similar TM1637 library I discovered that my 6-digit TM1637 display had a reversed physical layout for each of the 3-digit blocks making up the 6 digits.
+                -  -  -  -  -  -
+Physical digit |0||1||2||3||4||5|
+                -  -  -  -  -  -
+Logical digit 0 = Address 0x00 -> Physical digit 2
+Logical digit 1 = Address 0x01 -> Physical digit 1
+Logical digit 2 = Address 0x02 -> Physical digit 0
+Logical digit 3 = Address 0x03 -> Physical digit 5
+Logical digit 4 = Address 0x04 -> Physical digit 4
+Logical digit 5 = Address 0x05 -> Physical digit 3
+
+To overcome this absurdity, I created a logical to physical mapping array, called __tmDigitMap__ to describe the physical location of each logical digit.
+
+In the TM1637 example above this __tmDigitMap__ array would be {2, 1, 0, 5, 4, 3}.
+
+Without the logical to physical mapping array, trying to display "012345" would actually display "210543". Notice how the untranslated display of "012345" gives the logical to physical mapping array that corrects (translates) the display!
+
+In the easiTM1651 library, the idea is exactly the same way, but there can only be a maximum of 4 digits in the array, as that is the maximum number of digits supported by the TM1651 chip.
+
+For the reversed TM1651 example above __tmDigitMap__, the logical to physical mapping array that would correctly translate the display, is {3, 2, 1, 0}. 
+
+As a consequence of the logical addressing not necessarily incrementing left to right with the physical digits, I had to introduce support for the TM1651 fixed address mode. This allows the address of each digit to be specified before it is written. Contrast this with automatic address mode where the address is only specified at the beginning and incremented automatically by the TM1651 after each digit write.
 
 
 ## TM1651 Chip Pinout
@@ -143,7 +202,6 @@ This is the simple build I used while testing the [LEDC68demo.ino](examples/LEDC
 ## ToDo
 
 Is there anything? Let me know if you find a problem or think of any improvements!
-
 
 
 ## References 

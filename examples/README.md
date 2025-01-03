@@ -5,7 +5,7 @@ All examples were tested using an Arduino Mega and an Arduino Mini Pro (ATmega16
 ## Example - Gotek LEDC68 Module Function Demo.
 __Sketch: /LEDC68demo/LEDC68demo.ino__
 
-A simple sketch that demonatrates all the library functions on a TM1651 based Gotek LEDC68 module.
+A simple sketch that demonstrates all the easiTM1651 library functions with a TM1651 based Gotek LEDC68 module.
 
 
 // EOF

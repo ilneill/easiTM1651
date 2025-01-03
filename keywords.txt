@@ -8,6 +8,8 @@ TM1651	KEYWORD1
 # Methods and Functions (KEYWORD2)
 #######################################
 
+charTableSize KEYWORD2
+tmCharTable KEYWORD2
 begin KEYWORD2
 displayOff KEYWORD2
 displayClear KEYWORD2
@@ -17,7 +19,6 @@ displayInt8	KEYWORD2
 displayInt12 KEYWORD2
 displayInt16 KEYWORD2
 displayDP KEYWORD2
-charTableSize KEYWORD2
 
 #######################################
 # Constants (LITERAL1)

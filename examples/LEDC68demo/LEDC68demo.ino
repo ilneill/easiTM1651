@@ -8,7 +8,11 @@
  * Built on work by Derek Cooper. Thank you for the jump start!
  * References:
  *    https://www.instructables.com/Re-use-LEDC86-Old-Gotek-Display/
- */
+  *
+ * ****************************
+ * *  easiTM1651 Demo Sketch  *
+ * ****************************
+*/
 
 #include "easiTM1651.h"
 
@@ -20,14 +24,29 @@
 #define DIOPIN  3                                         // Data In/Out.
 #define LEDPIN  13                                        // The builtin LED.
 
+// The number of digits in the TM1651 based LED display.
+#define NUMDIGITS 3
+
+// Declaring an LEDC68 type of TM1651 based LED display module.
+#define LEDC68  true
+
+// A table to describe the physical to logical digit numbering.
+// This can be determined the when this demo first runs with the default map.
+//uint8_t tmDigitMap[NUMDIGITS] = {0, 1, 2};
+
 // Instantiate a TM1651 display.
-TM1651 myDisplay(CLKPIN, DIOPIN, true);                   // Set Clock and data pins and declare that we have an LEDC68 module.
+TM1651 myDisplay(CLKPIN, DIOPIN, LEDC68);                 // Set clock and data pins and declare that we have an LEDC68 module.
 
 void setup() {
   pinMode(LEDPIN, OUTPUT);
   digitalWrite(LEDPIN, OFF);
   Serial.begin(9600);
-  myDisplay.begin(3, INTENSITY_TYP);                      // Digits = 3, Brightness = 2, Display cleared (all segments OFF and decimal points OFF).
+  // TM1651 auto addressing mode, or fixed addressing mode and the default digit map.
+  myDisplay.begin(NUMDIGITS, INTENSITY_TYP);              // Digits = 3, Brightness = 2, Display cleared (all segments OFF and decimal points OFF).
+  // TM1651 fixed addressing mode using a supplied digit map.
+  //myDisplay.begin(tmDigitMap, NUMDIGITS, INTENSITY_TYP);  // Digits = 3, Brightness = 2, Display cleared (all segments OFF and decimal points OFF).
+  Serial.println("\nDisplay physical to logical mapping test.");
+  findDigitMap();
   Serial.println("\nDisplay brightness and digit test.");
   testDisplay();
   blinkLED(100);
@@ -87,12 +106,36 @@ void blinkLED(uint32_t interval) {
   digitalWrite(LEDPIN, OFF);
 }
 
+void findDigitMap() {
+  byte digit, counter;
+  // Map the digits, physical to logical.
+  for(digit = 0; digit < NUMDIGITS; digit++) {
+    myDisplay.displayChar(digit, digit);
+    delay(1000);
+  }
+  // Pulse the decimal points, giving some time to note down the number on the TM1651 based LED display.
+  if(LEDC68) {
+    for(counter = 0; counter < NUMDIGITS; counter++) {
+      myDisplay.displayDP(true);
+      delay(500);
+      myDisplay.displayDP(false);
+      delay(500);
+    }
+  }
+  else {
+    delay(1000 * NUMDIGITS);
+  }
+  myDisplay.displayClear();
+}
+
 void testDisplay() {
   byte brightness, digit, character;
   // Display brightness test.
   for(brightness = INTENSITY_MIN; brightness <= INTENSITY_MAX; brightness++) {
     myDisplay.displayBrightness(brightness);
-    myDisplay.displayInt12(0, (brightness * 111));
+    for(digit = 0; digit < NUMDIGITS; digit++) {
+      myDisplay.displayChar(digit, brightness);
+    }
     delay(1000);
   }
   // Clear the display and set the brightness to the typical value.
@@ -120,7 +163,7 @@ void countHex8(uint32_t interval) {
   do {
     myDisplay.displayInt8(1, counter, false);             // Print the 8-bit count in the 2nd and 3rd digits.
     delay(interval);
-  } while(++counter != 0);
+  } while(++counter != 0);                                // The counter is an 8-bit number that will wrap to zero.
 }
 
 void countHex12(uint32_t interval) {
@@ -128,13 +171,13 @@ void countHex12(uint32_t interval) {
   do {
     myDisplay.displayInt12(0, counter, false);            // Print the 12-bit count in the 1st, 2nd and 3rd digits.
     delay(interval);
-  } while(++counter != 0x1000);
+  } while(++counter != 0x1000);                           // The counter is a 16-bit number, so watch for it crossing the 12-bit boundry.
 }
 
 void countUp(uint16_t number, uint32_t interval) {
   int16_t counter;
   for(counter = 0; counter <= number; counter++) {
-    myDisplay.displayInt12(0, counter);                   // Print the 12-bit count in the 1st, 2nd and 3rd digits.
+    myDisplay.displayInt12(0, counter);                   // Print the 0 - 999 count in the 1st, 2nd and 3rd digits.
     delay(interval);
   }
 }
@@ -142,15 +185,15 @@ void countUp(uint16_t number, uint32_t interval) {
 void countDown(uint16_t number, uint32_t interval) {
   int16_t counter;
   for(counter = number; counter >= 0; counter--) {
-    myDisplay.displayInt12(0, counter);                   // Print the 12-bit count in the 1st, 2nd and 3rd digits.
+    myDisplay.displayInt12(0, counter);                   // Print the 999 - 0 count in the 1st, 2nd and 3rd digits.
     delay(interval);
   }
 }
 
 void countXMins(byte minutesMax) {
   byte minutes, seconds;
-  if(minutesMax > 16) {
-    minutesMax = 16;
+  if(minutesMax > 10) {                                   // Clip the number at the maximum for a 3-digit M.SS timer.
+    minutesMax = 10;
   }
   for(minutes = 0; minutes < minutesMax; minutes++) {
     for(seconds = 0; seconds < 60; seconds++) {
@@ -167,8 +210,8 @@ void countXMinsDP(byte minutesMax) {
   byte minutes = 0, seconds = 0;
   unsigned long timeNow, timeMark;
   timeMark = millis();
-  if(minutesMax > 16) {
-    minutesMax = 16;
+  if(minutesMax > 10) {                                   // Clip the number at the maximum for a 3-digit M.SS timer.
+    minutesMax = 10;
   }
   while (minutes != minutesMax || !dPoint) {
     timeNow = millis();
