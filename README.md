@@ -101,12 +101,12 @@ The TM1651 chip supports 2 addressing modes and the mode that is used by the lib
 * if __USEADDRAUTOMODE__ is defined: Automatic address mode is used.
 * if __USEADDRAUTOMODE__ is NOT defined: Fixed address mode is used.
 
-__Automatic__
+#### Automatic
 In this mode, the address to be used by the TM1651 for accessing the first digit is specified before the digit write, and is automatically incremented, after each digit write, to point to the next digit.
 
 This is useful if the digits to be written to are in sequential order.
 
-__Fixed__
+#### Fixed
 In this mode, the address to be used by the TM1651 for accessing each digit must be specified, before each digit write, to point to the digit that is to be written to.
 
 This is useful if the digits to be written to are not in increasing sequential order. If, for example, the logical addressing of the TM1651 based display does not match the phyical layout, than this mode should be used. This concept is explained more below.
@@ -123,9 +123,7 @@ i.e. Trying to display "h123" would actually look like "321h" on such a display.
 
 It might be that the logical and physical layouts are not simply reversed. When writing the related and similar TM1637 library I discovered that my 6-digit TM1637 display had a reversed physical layout for each of the 3-digit blocks making up the 6 digits.
 
- /-  -  -  -  -  -\
- |0||1||2||3||4||5| Physical digit\
- \-  -  -  -  -  -/
+Physical digits = | 0 || 1 || 2 || 3 || 4 || 5 |
 
 Logical digit 0 = Address 0x00 -> Physical digit 2\
 Logical digit 1 = Address 0x01 -> Physical digit 1\
