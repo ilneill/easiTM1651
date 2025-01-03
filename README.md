@@ -91,9 +91,9 @@ __void displayDP(bool status = false);__
 ### TM1651 Addressing Modes
 The TM1651 uses addresses and enable lines (GRID1- GRID4) to uniquely identify and access each of the LED 7-Segment display digits.
 
-Logical digit 0 = Address 0x00
-Logical digit 1 = Address 0x01
-Logical digit 2 = Address 0x02
+Logical digit 0 = Address 0x00\
+Logical digit 1 = Address 0x01\
+Logical digit 2 = Address 0x02\
 Logical digit 3 = Address 0x03 (or the decimal point if it is an LEDC68 module).
 
 The TM1651 chip supports 2 addressing modes and the mode that is used by the library is determined at compile time using a compiler definition in the "easiTM1651.h" file.
@@ -122,14 +122,16 @@ For instance, if the physical layout is such that logical digit 0, addressed by 
 i.e. Trying to display "h123" would actually look like "321h" on such a display.
 
 It might be that the logical and physical layouts are not simply reversed. When writing the related and similar TM1637 library I discovered that my 6-digit TM1637 display had a reversed physical layout for each of the 3-digit blocks making up the 6 digits.
+
+                -  -  -  -  -  -\
+Physical digit |0||1||2||3||4||5|\
                 -  -  -  -  -  -
-Physical digit |0||1||2||3||4||5|
-                -  -  -  -  -  -
-Logical digit 0 = Address 0x00 -> Physical digit 2
-Logical digit 1 = Address 0x01 -> Physical digit 1
-Logical digit 2 = Address 0x02 -> Physical digit 0
-Logical digit 3 = Address 0x03 -> Physical digit 5
-Logical digit 4 = Address 0x04 -> Physical digit 4
+
+Logical digit 0 = Address 0x00 -> Physical digit 2\
+Logical digit 1 = Address 0x01 -> Physical digit 1\
+Logical digit 2 = Address 0x02 -> Physical digit 0\
+Logical digit 3 = Address 0x03 -> Physical digit 5\
+Logical digit 4 = Address 0x04 -> Physical digit 4\
 Logical digit 5 = Address 0x05 -> Physical digit 3
 
 To overcome this absurdity, I created a logical to physical mapping array, called __tmDigitMap__ to describe the physical location of each logical digit.
