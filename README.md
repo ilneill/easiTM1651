@@ -1,6 +1,6 @@
 # [easiTM1651 Arduino Library](https://github.com/ilneill/easiTM1651)
 
-This is a very simple Arduino Library to control the TM1651 (up to) 4 digit 7-segment LED display driver. 
+This is a very simple Arduino Library to control the TM1651 (up to) 4-digit 7-segment LED display driver. 
 
 ![A Common TM1651 Module](images/Gotek_LEDC68-Front.jpg)
 
@@ -171,7 +171,7 @@ As a consequence of the logical addressing not necessarily incrementing left to 
 |VDD| 13| VCC - supply voltage |
 |DIO| 14| Data input/output |
 |CLK| 15| Clock input |
-|K1| 16| VCC - supply voltage |
+|K1| 16| Key scan data input |
 
 See the [datasheet](datasheets/TM1651_V1.1_EN.pdf) for more details.
 
@@ -190,7 +190,7 @@ The image below shows the relatively common Gotek (if you have upgaded your Gote
 
 ## Example Hardware Build
 
-Everything I have written has been tested using an Arduino Mega and an Arduino Mini Pro (ATmega168P) development board with an FT232 USB Serial adapter, and compiled using Arduino IDE v2.3.3.
+Everything I have written has been tested using an Arduino Mega and an Arduino Mini Pro (ATmega168P) development board with an FT232 USB Serial adapter, and compiled using Arduino IDE v2.3.4.
 
 ![An Arduino Mini Pro (ATmega168P)](images/ArduinoMiniPro.jpg)
 
@@ -207,9 +207,9 @@ Is there anything? Let me know if you find a problem or think of any improvement
 ## References 
 
 Other TM1651 Arduino libraries that I was inspired by:
- *    https://github.com/coopzone-dc/GotekLEDC68
- *    https://github.com/mworkfun/TM1650
- *    https://github.com/mworkfun/TM1651
+ * https://github.com/coopzone-dc/GotekLEDC68
+ * https://github.com/mworkfun/TM1650
+ * https://github.com/mworkfun/TM1651
 
 The TM1651 Datasheet:
 * [Titan Micro datasheet - TM1651](https://www.nxp.com/docs/en/data-sheet/TM1651_V1.1_EN.pdf)
