@@ -89,7 +89,7 @@ __void displayDP(bool status = false);__
 * Turn ON/OFF the decimal points. Returns nothing. Only works if it is an LEDC68 module.
 
 ### TM1651 Addressing Modes
-The TM1651 uses addresses and enable lines (GRID1- GRID4) to uniquely identify and access each of the LED 7-Segment display digits.
+The TM1651 uses addresses and enable lines (GRID1-GRID4) to uniquely identify and access each of the LED 7-Segment display digits.
 
 * Logical digit 0 = Address 0x00
 * Logical digit 1 = Address 0x01
@@ -104,7 +104,7 @@ The TM1651 chip supports 2 addressing modes and the mode that is used by the lib
 #### Automatic
 In this mode, the address to be used by the TM1651 for accessing the first digit is specified before the digit write, and is automatically incremented, after each digit write, to point to the next digit.
 
-This is useful if the digits to be written to are in sequential order.
+This is useful if the digits to be written to are in increasing sequential order.
 
 #### Fixed
 In this mode, the address to be used by the TM1651 for accessing each digit must be specified, before each digit write, to point to the digit that is to be written to.
