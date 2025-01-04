@@ -2,7 +2,7 @@
  * An Easy TM1651 Arduino Library.
  *  Simple, functional, optimal, and all in a class!
  *
- * The TM1651 is an (up to) 4 digit 7-Segment (no dp) LED display driver used in the Gotek 3 digit LEDC68 display.
+ * The TM1651 is an (up to) 4-Digit 7-Segment (no dp) LED display driver used in the Gotek 3-Digit LEDC68 display.
  *
  * Written for the Arduino Uno/Nano/Mega.
  * (c) Ian Neill 2024

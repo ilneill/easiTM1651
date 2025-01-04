@@ -155,7 +155,7 @@ As a consequence of the logical addressing not necessarily incrementing left to 
 ### Pin Descriptions of the TM1651 DIP16 Package
 
 |Pin Label | Pin Number | Description |
-|----------|--------------------|-------------|
+|-------|-------|-------|
 |GND| 1| GND - ground |
 |SEG1/KS1| 2| Output (segment 1) |
 |SEG2/KS2| 3| Output (segment 2) |
