@@ -39,12 +39,17 @@
   #define __TM1651_H
   #include <Arduino.h>
 
+  #define ON          HIGH
+  #define OFF         LOW
+
   // Compile time control for the TM1651 addressing mode.
   #define USEADDRAUTOMODE
 
   // Command and address definitions for the TM1651.
   #define ADDR_AUTO       0x40
   #define ADDR_FIXED      0x44
+  #define DISP_OFF        0x80
+  #define DISP_ON         0x88
   #define STARTADDR       0xc0 
 
   // Definitions for the decimal point but it's not well implemented in the LEDC68 hardware and is of limited use.
@@ -83,12 +88,12 @@
       void displayInt8(uint8_t, uint8_t, bool = true);    // Display a decimal integer between 0 - 99, or a hex integer between 0x00 - 0xff, starting at a specific digit.
       void displayInt12(uint8_t, uint16_t, bool = true);  // Display a decimal integer between 0 - 999, or a hex integer between 0x000 - 0xfff, starting at a specific digit.
       void displayInt16(uint8_t, uint16_t, bool = true);  // Display a decimal integer between 0 - 9999, or a hex integer between 0x0000 - 0xffff, starting at a specific digit.
-      void displayDP(bool = false);                       // Turn ON/OFF the decimal points.
+      void displayDP(bool = OFF);                         // Turn ON/OFF the decimal points.
     private:
       bool _LEDC68;                                       // Flag if we have a Gotek LEDC68 module - affects only the decimal point control.
-      uint8_t _clkPin;                                    // The TM1651 clock pin.
-      uint8_t _dataPin;                                   // The TM1651 data pin.
-      uint8_t _numDigits;                                 // The number of TM1651 digits.
+      uint8_t _clkPin;                                    // The current TM1651 clock pin.
+      uint8_t _dataPin;                                   // The current TM1651 data pin.
+      uint8_t _numDigits;                                 // The number of TM1651 module digits.
       uint8_t _brightness;                                // The current TM1651 display brightness.
       uint8_t _registers[MAX_DIGITS] = {0};               // An array used to hold the LED display digit values.
       #ifndef USEADDRAUTOMODE

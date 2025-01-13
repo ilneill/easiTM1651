@@ -16,19 +16,19 @@
 
 #include "easiTM1651.h"
 
-#define ON      HIGH
-#define OFF     LOW
+#define ON          HIGH
+#define OFF         LOW
 
 // Pin definitions for the TM1651 - the interface might look like I2C, but it is not!
-#define CLKPIN  2                                         // Clock.
-#define DIOPIN  3                                         // Data In/Out.
-#define LEDPIN  13                                        // The builtin LED.
+#define CLKPIN      2                                     // Clock.
+#define DIOPIN      3                                     // Data In/Out.
+#define LEDPIN      13                                    // The builtin LED.
 
 // The number of digits in the TM1651 based LED display.
-#define NUMDIGITS 3
+#define NUMDIGITS   3
 
 // Declaring an LEDC68 type of TM1651 based LED display module.
-#define LEDC68  true
+#define LEDC68      true
 
 // A table to describe the physical to logical digit numbering.
 // This can be determined the when this demo first runs with the default map.
@@ -42,9 +42,11 @@ void setup() {
   digitalWrite(LEDPIN, OFF);
   Serial.begin(9600);
   // TM1651 auto addressing mode, or fixed addressing mode and the default digit map.
-  myDisplay.begin(NUMDIGITS, INTENSITY_TYP);              // Digits = 3, Brightness = 2, Display cleared (all segments OFF and decimal points OFF).
+  // Digits = 3, Brightness = 2, Display cleared (all segments OFF and decimal points OFF).
+  myDisplay.begin(NUMDIGITS, INTENSITY_TYP);
   // TM1651 fixed addressing mode using a supplied digit map.
-  //myDisplay.begin(tmDigitMap, NUMDIGITS, INTENSITY_TYP);  // Digits = 3, Brightness = 2, Display cleared (all segments OFF and decimal points OFF).
+  // Digits = 3, Brightness = 2, Display cleared (all segments OFF and decimal points OFF).
+  //myDisplay.begin(tmDigitMap, NUMDIGITS, INTENSITY_TYP);
   Serial.println("\nDisplay physical to logical mapping test.");
   findDigitMap();
   Serial.println("\nDisplay brightness and digit test.");
@@ -116,9 +118,9 @@ void findDigitMap() {
   // Pulse the decimal points, giving some time to note down the number on the TM1651 based LED display.
   if(LEDC68) {
     for(counter = 0; counter < NUMDIGITS; counter++) {
-      myDisplay.displayDP(true);
+      myDisplay.displayDP(ON);
       delay(500);
-      myDisplay.displayDP(false);
+      myDisplay.displayDP(OFF);
       delay(500);
     }
   }
@@ -151,9 +153,9 @@ void testDisplay() {
   }
   // Decimal points ON/OFF test.
   myDisplay.displayClear();
-  myDisplay.displayDP(true);
+  myDisplay.displayDP(ON);
   delay(500);
-  myDisplay.displayDP(false);
+  myDisplay.displayDP(OFF);
   delay(500);
   }
 
@@ -206,7 +208,7 @@ void countXMins(byte minutesMax) {
 }
 
 void countXMinsDP(byte minutesMax) {
-  bool dPoint = true;
+  bool dPoint = ON;
   byte minutes = 0, seconds = 0;
   unsigned long timeNow, timeMark;
   timeMark = millis();

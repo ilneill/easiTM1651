@@ -85,7 +85,7 @@ __void displayInt12(uint8_t digit, uint16_t number, bool useDec = true);__
 __void displayInt16(uint8_t digit, uint16_t number, bool useDec = true);__
 * Display a decimal integer between 0 - 9999, or a hex integer between 0x0000 - 0xffff, starting at a specific digit. Returns nothing.
 
-__void displayDP(bool status = false);__
+__void displayDP(bool status = OFF);__
 * Turn ON/OFF the decimal points. Returns nothing. Only works if it is an LEDC68 module.
 
 ### TM1651 Addressing Modes
@@ -143,6 +143,14 @@ In the easiTM1651 library, the idea is exactly the same way, but there can only 
 For the reversed TM1651 example above __tmDigitMap__, the logical to physical mapping array that would correctly translate the display, is {3, 2, 1, 0}. 
 
 As a consequence of the logical addressing not necessarily incrementing left to right with the physical digits, I had to introduce support for the TM1651 fixed address mode. This allows the address of each digit to be specified before it is written. Contrast this with automatic address mode where the address is only specified at the beginning and incremented automatically by the TM1651 after each digit write.
+
+
+### API Defaults (AKA My Assumptions)
+As I only have a Gotek LEDC68 TM1651 based module, I have made assumptions with only it in mind.
+
+Specifically:
+* TM1651 auto-addressing mode is enabled.
+* The logical to physical mapping array is {0, 1, 2, 3}.
 
 
 ## TM1651 Chip Pinout
