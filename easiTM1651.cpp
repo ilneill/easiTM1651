@@ -5,10 +5,12 @@
  * The TM1651 is an (up to) 4-Digit 7-Segment (no dp) LED display driver used in the Gotek 3-Digit LEDC68 display.
  *
  * Written for the Arduino Uno/Nano/Mega.
- * (c) Ian Neill 2024
+ * (c) Ian Neill 2025
  * GPL(v3) Licence
  *
  * Built on work by Derek Cooper. Thank you for the jump start!
+ * ... with some developments backported into this library from my TM1638 and MAX7219 libraries.
+ *
  * References:
  *    https://www.instructables.com/Re-use-LEDC86-Old-Gotek-Display/
  *    https://github.com/coopzone-dc/GotekLEDC68
@@ -37,7 +39,7 @@
 
 #include "easiTM1651.h"
 
-// A table of 7-segment character codes.
+// A table of 7-segment character codes (47 in total).
 uint8_t TM1651::tmCharTable[] = {0x3f, 0x06, 0x5b, 0x4f, 0x66, 0x6d, 0x7d, 0x07, 0x7f, 0x67, // Numbers : 0-9.
                                  0x77, 0x7c, 0x39, 0x5e, 0x79, 0x71,                         // Numbers : A, b, C, d, E, F.
                                  0x58, 0x6f, 0x74, 0x76, 0x10, 0x30, 0x1e, 0x38,             // Chars1  : c, g, h, H, i, I, J, L.
@@ -126,6 +128,41 @@ void TM1651::displayBrightness(uint8_t brightness) {
   _brightness = brightness & INTENSITY_MAX;               // Record the TM1651 brightness level.
   cmdDispCtrl = DISP_ON + _brightness;                    // 0x88 + 0x00 to 0x07 brightness, 0x88 = display ON.
   this->writeCommand(cmdDispCtrl);                        // Set the brightness and turn the display ON.
+}
+
+// Test the display - all the display digit segments (+dp if there is one).
+void TM1651::displayTest(bool dispTest) {
+  uint8_t digit;
+  // Work on the display digits.
+  this->writeCommand(ADDR_AUTO);                          // Cmd to set auto incrementing address mode.
+  this->start();                                          // Send the start signal to the TM1651.
+  this->writeByte(STARTADDR);                             // Set the address to the first digit.
+  if(dispTest) {
+    // Turn ON all digit segments.
+    for(digit = 0; digit < _numDigits; digit++) {
+      this->writeByte(0x7f);                              // Direct write to turn all digit segments ON.
+    }
+  }
+  else {
+    // Restore all the digit segments to their previous values.
+    for(digit = 0; digit < _numDigits; digit++) {
+      this->writeByte(_registers[digit]);                // Restore the digit segments to what they were.
+    }
+  }
+  this->stop();                                           // Send the stop signal to the TM1651.
+  // Work on the decimal point if there is one.
+  if(_LEDC68) {                                           // If we have a Gotek LEDC68 module with DP control.
+    this->writeCommand(ADDR_FIXED);                       // Cmd to set specific address mode.
+    this->start();                                        // Send the start signal to the TM1651.
+    this->writeByte(STARTADDR + 0x03);                    // Set the address to the decimal point control digiit.
+    if(dispTest) {
+      this->writeByte(DP_ON);                             // Direct write to turn ON the decimal point.
+    }
+    else {
+      this->writeByte(_registers[0x03]);                  // Restore the decimal point to what it was.
+    }
+    this->stop();                                         // Send the stop signal to the TM1651.
+  }
 }
 
 // Display a character in a specific LED digit.

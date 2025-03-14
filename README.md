@@ -73,6 +73,9 @@ __void displayClear(void);__
 __void displayBrightness(uint8_t brightness = 2);__
 * Set the brightness (0x00 - 0x07) and turn the TM1651 display ON. Returns nothing.
 
+__void displayTest(bool dispTest = false);__
+* Test all the display segments (+dps). True turns ON all digit segments (+dps). False restores their previous values. Returns nothing.
+
 __void displayChar(uint8_t digit, uint8_t number, bool raw  = false);__
 * Display a character in a specific LED digit. Returns nothing.
 

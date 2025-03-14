@@ -5,10 +5,12 @@
  * The TM1651 is an (up to) 4-Digit 7-Segment (no dp) LED display driver used in the Gotek 3-Digit LEDC68 display.
  *
  * Written for the Arduino Uno/Nano/Mega.
- * (c) Ian Neill 2024
+ * (c) Ian Neill 2025
  * GPL(v3) Licence
  *
  * Built on work by Derek Cooper. Thank you for the jump start!
+ * ... with some developments backported into this library from my TM1638 and MAX7219 libraries.
+ *
  * References:
  *    https://www.instructables.com/Re-use-LEDC86-Old-Gotek-Display/
  *    https://github.com/coopzone-dc/GotekLEDC68
@@ -84,6 +86,7 @@
       void displayOff(void);                              // Turn the TM1651 display OFF.
       void displayClear(void);                            // Clear all the digits in the display.
       void displayBrightness(uint8_t = INTENSITY_TYP);    // Set the brightness and turn the TM1651 display ON.
+      void displayTest(bool = false);                     // Test the display - all the display digit segments (+dp if there is one).
       void displayChar(uint8_t, uint8_t, bool = false);   // Display a character in a specific digit.
       void displayInt8(uint8_t, uint8_t, bool = true);    // Display a decimal integer between 0 - 99, or a hex integer between 0x00 - 0xff, starting at a specific digit.
       void displayInt12(uint8_t, uint16_t, bool = true);  // Display a decimal integer between 0 - 999, or a hex integer between 0x000 - 0xfff, starting at a specific digit.
