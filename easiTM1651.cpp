@@ -49,7 +49,7 @@ uint8_t TM1651::tmCharTable[] = {0x3f, 0x06, 0x5b, 0x4f, 0x66, 0x6d, 0x7d, 0x07,
                                  0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40};                  // Segments: SegA, SegB, SegC, SegD, SegE, SegF, SegG.
 
 // A table to describe the physical to logical digit numbering.
-#ifndef USEADDRAUTOMODE
+#ifndef USEADDRAUTOMODE51
   // This map assumes that the digits are logically addressed in the same order as they are physically built.
   uint8_t TM1651::tmDigitMapDefault[] = {0, 1, 2, 3};
 #endif
@@ -70,10 +70,10 @@ TM1651::TM1651(uint8_t clkPin, uint8_t dataPin, bool LEDC68) {
 
 // Set up the display and initialise it with defaults values - with the default or no digit map.
 void TM1651::begin(uint8_t numDigits, uint8_t brightness) {
-  #ifndef USEADDRAUTOMODE
+  #ifndef USEADDRAUTOMODE51
     _tmDigitMap = tmDigitMapDefault;
   #endif
-  if(numDigits > 0 && numDigits <= MAX_DIGITS) {          // The TM1651 module supports up to 4 digits.
+  if(numDigits > 0 && numDigits <= MAX_DIGITS51) {        // The TM1651 module supports up to 4 digits.
     _numDigits = numDigits;
   }
   else {
@@ -88,11 +88,11 @@ void TM1651::begin(uint8_t numDigits, uint8_t brightness) {
   this->displayBrightness(brightness);                    // Set the display to the chosen (or default) brightness.
 }
 
-#ifndef USEADDRAUTOMODE
+#ifndef USEADDRAUTOMODE51
   // Set up the display and initialise it with defaults values - with a supplied digit map.
   void TM1651::begin(uint8_t* tmDigitMap, uint8_t numDigits, uint8_t brightness) {
     _tmDigitMap = tmDigitMap;
-    if(numDigits > 0 && numDigits <= MAX_DIGITS) {        // The TM1651 module supports up to 4 digits.
+    if(numDigits > 0 && numDigits <= MAX_DIGITS51) {      // The TM1651 module supports up to 4 digits.
       _numDigits = numDigits;
     }
     else {
@@ -110,7 +110,7 @@ void TM1651::begin(uint8_t numDigits, uint8_t brightness) {
 
 // Turn the TM1651 display OFF.
 void TM1651::displayOff(void) {
-  cmdDispCtrl = DISP_OFF;                                 // 0x80 = display OFF.
+  cmdDispCtrl = DISP_OFF51;                               // 0x80 = display OFF.
   this->writeCommand(cmdDispCtrl);                        // Turn the display OFF.
 }
 
@@ -125,8 +125,8 @@ void TM1651::displayClear(void) {
 
 // Set the brightness (0x00 - 0x07) and turn the TM1651 display ON.
 void TM1651::displayBrightness(uint8_t brightness) {
-  _brightness = brightness & INTENSITY_MAX;               // Record the TM1651 brightness level.
-  cmdDispCtrl = DISP_ON + _brightness;                    // 0x88 + 0x00 to 0x07 brightness, 0x88 = display ON.
+  _brightness = brightness & INTENSITY_MAX51;             // Record the TM1651 brightness level.
+  cmdDispCtrl = DISP_ON51 + _brightness;                  // 0x88 + 0x00 to 0x07 brightness, 0x88 = display ON.
   this->writeCommand(cmdDispCtrl);                        // Set the brightness and turn the display ON.
 }
 
@@ -134,9 +134,9 @@ void TM1651::displayBrightness(uint8_t brightness) {
 void TM1651::displayTest(bool dispTest) {
   uint8_t digit;
   // Work on the display digits.
-  this->writeCommand(ADDR_AUTO);                          // Cmd to set auto incrementing address mode.
+  this->writeCommand(ADDR_AUTO51);                        // Cmd to set auto incrementing address mode.
   this->start();                                          // Send the start signal to the TM1651.
-  this->writeByte(STARTADDR);                             // Set the address to the first digit.
+  this->writeByte(STARTADDR51);                           // Set the address to the first digit.
   if(dispTest) {
     // Turn ON all digit segments.
     for(digit = 0; digit < _numDigits; digit++) {
@@ -146,17 +146,17 @@ void TM1651::displayTest(bool dispTest) {
   else {
     // Restore all the digit segments to their previous values.
     for(digit = 0; digit < _numDigits; digit++) {
-      this->writeByte(_registers[digit]);                // Restore the digit segments to what they were.
+      this->writeByte(_registers[digit]);                 // Restore the digit segments to what they were.
     }
   }
   this->stop();                                           // Send the stop signal to the TM1651.
   // Work on the decimal point if there is one.
   if(_LEDC68) {                                           // If we have a Gotek LEDC68 module with DP control.
-    this->writeCommand(ADDR_FIXED);                       // Cmd to set specific address mode.
+    this->writeCommand(ADDR_FIXED51);                     // Cmd to set specific address mode.
     this->start();                                        // Send the start signal to the TM1651.
-    this->writeByte(STARTADDR + 0x03);                    // Set the address to the decimal point control digiit.
+    this->writeByte(STARTADDR51 + 0x03);                  // Set the address to the decimal point control digiit.
     if(dispTest) {
-      this->writeByte(DP_ON);                             // Direct write to turn ON the decimal point.
+      this->writeByte(DP_ON51);                           // Direct write to turn ON the decimal point.
     }
     else {
       this->writeByte(_registers[0x03]);                  // Restore the decimal point to what it was.
@@ -178,7 +178,7 @@ void TM1651::displayChar(uint8_t digit, uint8_t number, bool raw) {
       number = tmCharTable[number];                       // Get the raw number from the character table.
     }
     _registers[digit] = number;                           // Record the latest value for this LED digit.
-    this->writeCommand(ADDR_FIXED);                       // Cmd to set specific address mode.
+    this->writeCommand(ADDR_FIXED51);                     // Cmd to set specific address mode.
     this->writeDigit(digit);                              // Write the character digit to the display.
   }
 }
@@ -197,11 +197,11 @@ void TM1651::displayInt8(uint8_t digit, uint8_t number, bool useDec) {
       _registers[digit]     = (tmCharTable[(number / 16) % 16]);
       _registers[digit + 1] = (tmCharTable[ number       % 16]);
     }
-    #ifdef USEADDRAUTOMODE
-      this->writeCommand(ADDR_AUTO);                      // Cmd to set auto address mode.
+    #ifdef USEADDRAUTOMODE51
+      this->writeCommand(ADDR_AUTO51);                    // Cmd to set auto address mode.
       this->writeDigit(digit, 2);                         // Write the digits of the 8-bit number.
     #else
-      this->writeCommand(ADDR_FIXED);                     // Cmd to set specific address mode.
+      this->writeCommand(ADDR_FIXED51);                   // Cmd to set specific address mode.
       this->writeDigit(digit);                            // Write the first digit of the 8-bit number.
       this->writeDigit(digit + 1);                        // Write the second digit of the 8-bit number.
     #endif
@@ -227,11 +227,11 @@ void TM1651::displayInt12(uint8_t digit, uint16_t number, bool useDec) {
       _registers[digit + 1] = (tmCharTable[(number /  16) % 16]);
       _registers[digit + 2] = (tmCharTable[ number        % 16]);
     }
-    #ifdef USEADDRAUTOMODE
-      this->writeCommand(ADDR_AUTO);                      // Cmd to set auto address mode.
+    #ifdef USEADDRAUTOMODE51
+      this->writeCommand(ADDR_AUTO51);                    // Cmd to set auto address mode.
       this->writeDigit(digit, 3);                         // Write the digits of the 12-bit number.
     #else
-      this->writeCommand(ADDR_FIXED);                     // Cmd to set specific address mode.
+      this->writeCommand(ADDR_FIXED51);                   // Cmd to set specific address mode.
       this->writeDigit(digit);                            // Write the first digit of the 12-bit number.
       this->writeDigit(digit + 1);                        // Write the second digit of the 12-bit number.
       this->writeDigit(digit + 2);                        // Write the third digit of the 12-bit number.
@@ -257,11 +257,11 @@ void TM1651::displayInt16(uint8_t digit, uint16_t number, bool useDec) {
       _registers[digit + 2] = (tmCharTable[(number /   16) % 16]);
       _registers[digit + 3] = (tmCharTable[ number         % 16]);
     }
-    #ifdef USEADDRAUTOMODE
-      this->writeCommand(ADDR_AUTO);                      // Cmd to set auto address mode.
+    #ifdef USEADDRAUTOMODE51
+      this->writeCommand(ADDR_AUTO51);                    // Cmd to set auto address mode.
       this->writeDigit(digit, 4);                         // Write the digits of the 16-bit number.
     #else
-      this->writeCommand(ADDR_FIXED);                     // Cmd to set specific address mode.
+      this->writeCommand(ADDR_FIXED51);                   // Cmd to set specific address mode.
       this->writeDigit(digit);                            // Write the first digit of the 16-bit number.
       this->writeDigit(digit + 1);                        // Write the second digit of the 16-bit number.
       this->writeDigit(digit + 2);                        // Write the third digit of the 16-bit number.
@@ -274,8 +274,8 @@ void TM1651::displayInt16(uint8_t digit, uint16_t number, bool useDec) {
 void TM1651::displayDP(bool status) {
   uint8_t digit = 0x03;
   if(_LEDC68) {                                           // If we have a Gotek LEDC68 module with DP control.
-    _registers[digit] = status ? DP_ON : DP_OFF;
-    this->writeCommand(ADDR_FIXED);                       // Cmd to set specific address mode.
+    _registers[digit] = status ? DP_ON51 : DP_OFF51;
+    this->writeCommand(ADDR_FIXED51);                     // Cmd to set specific address mode.
     this->writeDigit(digit);                              // Write the character digit to the display.
   }
 }
@@ -292,15 +292,15 @@ void TM1651::writeCommand(uint8_t command) {
   this->stop();                                           // Send the stop signal to the TM1651.
 }
 
-#ifndef USEADDRAUTOMODE
+#ifndef USEADDRAUTOMODE51
   // Write the given logical digit value to the correct physical digit.
   void TM1651::writeDigit(uint8_t digit) {
     this->start();                                        // Send the start signal to the TM1651.
     if(_LEDC68 && digit == 0x03) {
-      this->writeByte(STARTADDR + digit);                 // Write the digit start address to the TM1651.
+      this->writeByte(STARTADDR51 + digit);               // Write the digit start address to the TM1651.
     }
     else {
-      this->writeByte(STARTADDR + _tmDigitMap[digit]);    // Set the address for the requested digit.
+      this->writeByte(STARTADDR51 + _tmDigitMap[digit]);  // Set the address for the requested digit.
     }
     this->writeByte(_registers[digit]);                   // Write the number to the display digit.
     this->stop();                                         // Send the stop signal to the TM1651.
@@ -310,7 +310,7 @@ void TM1651::writeCommand(uint8_t command) {
   void TM1651::writeDigit(uint8_t digit, uint8_t numDigits) {
     uint8_t digitCounter;
     this->start();                                        // Send the start signal to the TM1651.
-    this->writeByte(STARTADDR + digit);                   // Write the digit start address to the TM1651.
+    this->writeByte(STARTADDR51 + digit);                 // Write the digit start address to the TM1651.
     for(digitCounter = 0; digitCounter < numDigits; digitCounter++) {
       this->writeByte(_registers[digit + digitCounter]);  // Write the current number to the display digit.
     }
